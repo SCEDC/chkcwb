@@ -2,16 +2,16 @@
 
 chkcwb.py is a wrapper script around CWBQuery.jar. It's written in python2.x. chkcwb is a shell script wrapper around chkcwb.py created for ease of use.
 
-chkcwb.py uses a config file named chkcwb.cfg. This config file must be present at the same location as the python script itself. 
+chkcwb.py uses a config file named chkcwb.cfg. This config file must be present at the same location as the python script. 
 
 Operation
 ----------
 
-The default operation of chkcwb.py is to run CWBQuery.jar with -list for a sncl input by the user and the duration mentioned in the config file. If a sncl is offline, the timestamp of the last data packet received for it is returned. 
+The default operation of chkcwb.py is to run CWBQuery.jar with -list for a sncl input by the user and the duration mentioned in the config file. If a sncl is offline, the timestamp of the last data packet received is returned. 
 
-chkcwb can be setup to query an AQMS database for a specific list of net.sta. Any sncls that do not show up in -list but are known to be online are queried for their last data received. This is especially useful with wildcard searches. The database information can be specified in chkcwb.cfg under section [db]. See sample chkcwb.cfg for more information. This is entirely optional.
+This whole paragraph is optional. chkcwb can be setup to query an AQMS database for a specific list of net.sta. Any sncls that do not show up in -list but are known to be online are queried for their last data received. This is especially useful with wildcard searches. The database information can be specified in chkcwb.cfg under section [db]. See sample chkcwb.cfg for more information.
 
-chkcwb can also be used to query for gaps as well as latency in data for a sncl. See usage for more information.
+chkcwb can also be used to query for gaps and latency in data acquisition for a sncl. See usage for more information.
   
 
 Pre-requisites
@@ -26,6 +26,7 @@ Usage
 ------
 
 $ chkcwb --help
+
 NOTE: It is recommended to put double quotes around the sncl argument  
 usage: chkcwb.py [-h] [-s CWBHOST] [-a] [-gaps] [-lat] [-debug] [sncl]  
 
@@ -45,9 +46,10 @@ optional arguments:
 Examples
 ---------
 
-1. Check for status of a station
+<b>1. Check for status of a station</b>
 
 $ chkcwb "CI.WCS2"
+
 NOTE: It is recommended to put double quotes around the sncl argument
 
 Checking CI.WCS2 at 2018/04/13 23:35:11 UTC
@@ -62,8 +64,10 @@ Last check at 2018/04/13 23:36:12, Run for  CI.WCS2.HNZ is complete 100%.
 
 
 
-2. Check for status of a station (station is currently no acquiring data)
+<b>2. Check for status of a station (station is currently no acquiring data)</b>
+
 $ chkcwb "CI.EDW2"
+
 NOTE: It is recommended to put double quotes around the sncl argument
 
 Checking CI.EDW2 at 2018/04/13 23:37:47 UTC
@@ -89,7 +93,7 @@ End of execution
 
 
 
-3. Check for data gaps in a station
+<b>3. Check for data gaps in a station</b>
 
 $ chkcwb "CI.COK2" -a -gaps
 
@@ -130,7 +134,7 @@ Gap: 2018,243,22:12:14.000 to 2018,243,22:43:54.000 (1900.0 secs) End-of-interva
 
 
 
-4. Wildcard search
+<b>4. Wildcard search</b>
 $ chkcwb "CI.C*"
 
 *** NOTE: It is recommended to put double quotes around the sncl argument ***
