@@ -7,7 +7,7 @@ chkcwb.py uses a config file named chkcwb.cfg. This config file must be present 
 Operation
 ----------
 
-The default operation of chkcwb.py is to run CWBQuery.jar with -list for a sncl input by the user and the duration mentioned in the config file. If a sncl is offline, the timestamp of the last data packet received is returned. 
+The default operation of chkcwb.py is to run CWBQuery.jar with -list for a sncl input by the user and the duration mentioned in the config file. If a sncl is offline, the timestamp of the last data packet received is returned. By default, chkcwb only checks for EH, HH and HN channels for input sncl.  
 
 This whole paragraph is *optional*. chkcwb can be setup to query an AQMS database for a specific list of net.sta. Any sncls that do not show up in -list but are known to be online are queried for their last data received. This is especially useful with wildcard searches. The database information can be specified in chkcwb.cfg under section [db]. See sample chkcwb.cfg for more information.
 
