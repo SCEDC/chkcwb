@@ -64,7 +64,7 @@ Last check at 2018/04/13 23:36:12, Run for  CI.WCS2.HNZ is complete 100%.
 
 
 
-<b>2. Check for status of a station (station is currently no acquiring data)</b>
+<b>2. Check for status of a station (station is currently not acquiring data)</b>
 
 $ chkcwb "CI.EDW2"
 
