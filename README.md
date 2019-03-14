@@ -1,6 +1,8 @@
 # chkcwb
 
-chkcwb.py is a wrapper script around CWBQuery.jar. It's written in python2.x. chkcwb is a shell script wrapper around chkcwb.py created for ease of use.
+chkcwb is a tool to check for data availability in CWB, typically near real time. 
+ 
+It is consists of chkcwb.py, which is a wrapper script around CWBQuery.jar. It's written in python2.x. chkcwb is a shell script wrapper around chkcwb.py created for ease of use.
 
 chkcwb.py uses a config file named chkcwb.cfg. This config file must be present at the same location as the python script. 
 
