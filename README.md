@@ -1,10 +1,11 @@
 # chkcwb
 
-chkcwb is a tool to check for data availability in CWB, typically near real time. 
+chkcwb is a tool to check for data availability in CWB, typically near real time. Additionally, it can also be used to query for gaps and latency in data acquisition for a sncl.
  
 It is consists of chkcwb.py, which is a wrapper script around CWBQuery.jar. It's written in python2.x. chkcwb is a shell script wrapper around chkcwb.py created for ease of use.
 
 chkcwb.py uses a config file named chkcwb.cfg. This config file must be present at the same location as the python script. 
+
 
 Operation
 ----------
@@ -13,7 +14,6 @@ The default operation of chkcwb.py is to run CWBQuery.jar with -list for a sncl 
 
 This whole paragraph is *optional*. chkcwb can be setup to query an AQMS database for a specific list of net.sta. Any sncls that do not show up in -list but are known to be online are queried for their last data received. This is especially useful with wildcard searches. The database information can be specified in chkcwb.cfg under section [db]. See sample chkcwb.cfg for more information.
 
-chkcwb can also be used to query for gaps and latency in data acquisition for a sncl. See usage for more information.
   
 
 Pre-requisites
