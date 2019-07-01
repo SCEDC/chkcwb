@@ -30,7 +30,8 @@ Installation
 chkcwb is deployed using python's venv (virtualenv for Python 2.x). The steps to install are:
 
 ```
-git clone https://github.com/SCEDC/chkcwb.git. 
+git clone https://github.com/SCEDC/chkcwb.git
+
 cd chkcwb
 ```
 
@@ -46,11 +47,13 @@ python3 setup-chkcwb.py
 source ./chkcwb-venv/bin/activate
 ```
 
+Your virtual environment is now active. See under configuration to configure your chkcwb instance. See under usage for how to use chkcwb.
+
 
 Configuration
 --------------
 
-Edit chkcwb.cfg and modify as needed. Lines beginning with # are comments. The following are required to be set before chkcwb can be used.
+Modify chkcwb.cfg as needed. Lines beginning with # are comments. The following are required to be set before chkcwb can be used.
 
 CWBQUERYPATH
 CWBIP
