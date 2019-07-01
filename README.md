@@ -18,10 +18,43 @@ This whole paragraph is *optional*. chkcwb can be setup to run a sql query again
 
 Pre-requisites
 ---------------
-- Python 2.6 or 2.7
-- Java 1.8
+- Python 2.6, 2.7 or 3.x
+- virtualenv, if using python 2.x
 - CWBQuery.jar
 - cx_Oracle, if using AQMS database
+
+
+Installation 
+-------------
+
+chkcwb is deployed python's venv (virtualenv for Python 2.x). The steps to install are:
+
+```git clone https://github.com/SCEDC/chkcwb.git. 
+cd chkcwb```
+
+setup-chckwb.py creates a virtual environment named chkcwb-venv and installs dependencies within the virtual environment from requirements.txt. 
+Note : you will need to install virtualenv, if you are using python2
+```
+python setup-chkcwb.py
+
+OR
+
+python3 setup-chkcwb.py
+
+source ./chkcwb-venv/bin/activate
+```
+
+
+Configuration
+--------------
+
+Edit chkcwb.cfg and modify as needed. Lines beginning with # are comments. The following are required to be set before chkcwb can be used.
+
+CWBQUERYPATH
+CWBIP
+
+If you do not wish to use sql, comment out or remove the entire [db] section from chkcwb.cfg.
+
 
 
 Usage
