@@ -39,7 +39,7 @@ def Main():
     stationsexactmatch = []
     
     parser = ArgumentParser()
-    parser.add_argument('sncl', nargs='?', default="",help='SNCL to query for. *** NOTE: It is recommended to put double quotes around the sncl argument ***. Format is NN.SSSSS. Wildcards can be used. Information for DURATION seconds (from chkcwb.cfg) will be returned.')
+    parser.add_argument('sncl', nargs='?', default="",help='SNCL to query for. *** NOTE: It is recommended to put double quotes around the net.sta argument ***. Format is NN.SSSSS. Wildcards can be used. Information for DURATION seconds (from chkcwb.cfg) will be returned.')
     parser.add_argument('-s', help="The CWB server to connect to, default is CWBIP from chkcwb.cfg", dest='cwbhost')
     parser.add_argument('-a', help="Display all channels associated with station(s)", action='store_true', dest='allchans')
     parser.add_argument('-gaps', help="Display gaps associated with station(s), for the past hour", action='store_true', dest='gapFlag')
@@ -47,7 +47,7 @@ def Main():
     parser.add_argument('-debug', action='store_true', dest='debug')
     options = parser.parse_args()
 
-    print ("\n*** NOTE: It is recommended to put double quotes around the sncl argument ***\n")
+    print ("\n*** NOTE: It is recommended to put double quotes around the NN.SSSSS argument ***\n")
 
     if options.debug:
         debug = 1

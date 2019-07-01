@@ -67,20 +67,23 @@ Usage
 
 $ chkcwb --help
 
-NOTE: It is recommended to put double quotes around the sncl argument  
-usage: chkcwb.py [-h] [-s CWBHOST] [-a] [-gaps] [-lat] [-debug] [sncl]  
+usage: chkcwb.py [-h] [-s CWBHOST] [-a] [-gaps] [-lat] [-debug] [sncl]
 
-positional arguments:  
-  sncl        SNCL to query for. Format is NN.SSSSS.CCC.LL. Wildcards can be
-              used. Information for the past minute will be returned.
+positional arguments:
+  sncl        SNCL to query for. *** NOTE: It is recommended to put double
+              quotes around the net.sta argument ***. Format is NN.SSSSS.
+              Wildcards can be used. Information for DURATION seconds (from
+              chkcwb.cfg) will be returned.
 
-optional arguments:  
-  -h, --help  show this help message and exit  
-  -s CWBHOST  The CWB server to connect to, default is CWBIP from chkcwb.cfg  
-  -a          Display all channels associated with station(s)  
-  -gaps       Display gaps associated with station(s), for the past hour  
-  -lat        Display latency associated with station(s)  
-  -debug  
+optional arguments:
+  -h, --help  show this help message and exit
+  -s CWBHOST  The CWB server to connect to, default is CWBIP from chkcwb.cfg
+  -a          Display all channels associated with station(s)
+  -gaps       Display gaps associated with station(s), for the past hour
+  -lat        Display latency associated with station(s)
+  -debug
+
+
 
 
 Examples
