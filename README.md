@@ -1,6 +1,6 @@
 # chkcwb
 
-chkcwb is a tool to check for data availability in CWB, typically near real time. Additionally, it can also be used to query for gaps and latency in data acquisition for a sncl.
+chkcwb is a tool to check for data availability in CWB, typically near real time. Additionally, it can also be used to query for gaps and latency in data acquisition for a station.
  
 It is consists of chkcwb.py, which is a wrapper script around CWBQuery.jar. It's written in python2.x. chkcwb is a shell script wrapper around chkcwb.py created for ease of use.
 
@@ -10,7 +10,7 @@ chkcwb.py uses a config file named chkcwb.cfg. This config file must be present 
 Operation
 ----------
 
-The default operation of chkcwb.py is to run CWBQuery.jar with -list for a sncl input by the user and the duration mentioned in the config file. If a sncl is offline, the timestamp of the last data packet received is returned. By default, chkcwb only checks for EH, HH and HN channels for input sncl.  
+The default operation of chkcwb.py is to run CWBQuery.jar with -list for a net.sta input by the user and the duration mentioned in the config file. If a sncl is offline, the timestamp of the last data packet received is returned. By default, chkcwb only checks for the channels mentioned in the [search_defaults] section in the config file.  
 
 This whole paragraph is *optional*. chkcwb can be setup to run a sql query against an AQMS database to obtain a specific list of net.sta. This is especially useful with wildcard searches for RSNs with large number of channels. The database information and query details can be specified in chkcwb.cfg under section [db]. See sample chkcwb.cfg for more information.
 

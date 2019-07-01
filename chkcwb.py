@@ -3,11 +3,15 @@
 ##################################
 # Wrapper around CWBQuery.jar
 #
-# Author: Aparna Bhaskaran
+# Author: Aparna Bhaskaran (aparnab@gps.caltech.edu)
 ##################################
 
+from __future__ import print_function
 from argparse import ArgumentParser
-import ConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import time
 import subprocess
 import re
@@ -15,6 +19,7 @@ import sys
 import os
 import glob
 import cx_Oracle
+import traceback
 
 #debug
 debug = 0
@@ -29,12 +34,12 @@ def Main():
     loc = ""
     sncl = ""
     cwbhost = ""
-    queryjarlines = ""
+    queryjarlines = []
     stationsfromregex = []
     stationsexactmatch = []
     
     parser = ArgumentParser()
-    parser.add_argument('sncl', nargs='?', default="",help='SNCL to query for. *** NOTE: It is recommended to put double quotes around the sncl argument ***. Format is NN.SSSSS.CCC.LL. Wildcards can be used. Information for DURATION seconds (from chkcwb.cfg) will be returned.')
+    parser.add_argument('sncl', nargs='?', default="",help='SNCL to query for. *** NOTE: It is recommended to put double quotes around the sncl argument ***. Format is NN.SSSSS. Wildcards can be used. Information for DURATION seconds (from chkcwb.cfg) will be returned.')
     parser.add_argument('-s', help="The CWB server to connect to, default is CWBIP from chkcwb.cfg", dest='cwbhost')
     parser.add_argument('-a', help="Display all channels associated with station(s)", action='store_true', dest='allchans')
     parser.add_argument('-gaps', help="Display gaps associated with station(s), for the past hour", action='store_true', dest='gapFlag')
@@ -42,15 +47,15 @@ def Main():
     parser.add_argument('-debug', action='store_true', dest='debug')
     options = parser.parse_args()
 
-    print "\n*** NOTE: It is recommended to put double quotes around the sncl argument ***\n"
+    print ("\n*** NOTE: It is recommended to put double quotes around the sncl argument ***\n")
 
     if options.debug:
         debug = 1
 
     if debug:
-        print options    
+        print (options)
     
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.read(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chkcwb.cfg'))
     
     if options.sncl == '':
@@ -59,7 +64,7 @@ def Main():
         sncl = options.sncl
 
     if re.search('[^_?.*a-zA-Z0-9]',sncl) != None:
-        print "Invalid sncl. Allowed characters are ?, *, ., _, a-z, A-Z and 0-9"
+        print ("Invalid sncl. Allowed characters are ?, *, ., _, a-z, A-Z and 0-9")
         return
     
         
@@ -97,7 +102,8 @@ def Main():
         cwbsncl = DotPad(sncl, 7)
 
     if not options.allchans and len(cwbsncl) < 12:
-        cwbsncl = '%s[EH][HN].*' %cwbsncl
+        cwbsncl = '%s(%s)' %(cwbsncl, config.get('search_defaults','CHANNELS').strip().replace(" ", "").replace(",","|").replace("*",".*").replace("_",".?"))
+        cwbsncl += ".*"
 
     if options.cwbhost:
         cwbhost = options.cwbhost
@@ -106,7 +112,7 @@ def Main():
 
 
     if debug:
-        print 'cwbsncl = ', cwbsncl
+        print ('cwbsncl = ', cwbsncl)
     
     if options.gapFlag:
         Gaps(cwbsncl, options, config)
@@ -131,7 +137,7 @@ def Main():
                         statement += " and sta like '{0}' ".format(sta.replace('*','%').replace('?','%').replace('_','%'))
                         statement += "order by 1,2"
                     if debug:
-                        print statement   
+                        print (statement)
 
                     conn = cx_Oracle.connect(dbuser, dbpassword, dbname)
                     cursor = conn.cursor()                
@@ -150,7 +156,7 @@ def Main():
     try:        
 
         #by default, use the cwbip and port in the query.prop
-        cmd = ['java', '-jar','%s/CWBQuery.jar' %config.get('cwb','CWBQUERYPATH'), '-s', cwbsncl, '-b', paststr,  '-d', '%s' %config.get('duration','DURATION'), '-list']
+        cmd = ['java', '-jar','%s/CWBQuery.jar' %config.get('cwb','CWBQUERYPATH'), '-s', '"%s"' %cwbsncl, '-b', paststr,  '-d', '%s' %config.get('duration','DURATION'), '-list']
 
         #use CWB host has specified via -s or in the config file via CWPIP
         if cwbhost:
@@ -158,34 +164,31 @@ def Main():
             cmd.append(cwbhost)
 
         if debug:
-            print cmd
+            print (cmd)
         
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        #proc.wait()        
         nowstr = time.strftime('%Y/%m/%d %H:%M:%S',time.gmtime(now - float(config.get('duration','DURATION'))))
         queryjarlines =  proc.stdout.readlines()
 
     except KeyboardInterrupt:
-        print "KeyboardInterrupt"
+        print ("KeyboardInterrupt")
         return
     except:
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print exc_type
-        print exc_value
-        print exc_traceback
+        for line in traceback.format_tb(exc_traceback):
+            print(line)
 
     try:
 
-        print "\nChecking %s at %s UTC\n" %(sncl,nowstr)
+        print ("\nChecking %s at %s UTC\n" %(sncl,nowstr))
 
         if debug:
-            print queryjarlines
-            print len(queryjarlines)
+            print (queryjarlines)
+            print (len(queryjarlines))
 
         for line in queryjarlines:
             nowstr = time.strftime('%Y/%m/%d %H:%M:%S',time.gmtime(time.time()))        
-            line = line.replace('\nRun for  ', 'data for ').strip('\n')
-            #print line
+            line = line.decode().replace('\nRun for  ', 'data for ').strip('\n')
 
             sncl = re.search("[A-Z0-9]+\s*[A-Z0-9]+", line).group(0)
 
@@ -197,25 +200,28 @@ def Main():
                 dottedsncl += '.%s' %(sncl[10:12])
             dottedsncl += ' '
             line = re.sub("[A-Z0-9]+\s*[A-Z0-9]+\s*", dottedsncl, line, count=1)
-            print "Last check at %s, %s" %(nowstr, line.strip('\n'))
+            print ("Last check at %s, %s" %(nowstr, line.strip('\n')))
 
         
         if not len(queryjarlines):
-            print "\n{0} might be offline. Checking last packet receive time...\n".format(sncl)
+            print ("\n{0} might be offline. Checking last packet receive time...\n".format(sncl))
             Latency(cwbsncl, config, cwbhost)
         elif stationsfromregex:            
             for sncl in stationsfromregex:
-                print "\n{0} might be offline. Checking last packet receive time...\n".format(sncl)
+                print ("\n{0} might be offline. Checking last packet receive time...\n".format(sncl))
                 #sncl is NNSSSSS right now, with length = 7
                 cwbsncl = sncl.replace(" ",".")                
                 if not options.allchans:
                     cwbsncl = '{0}[EH][HN]'.format(cwbsncl)
                 Latency(cwbsncl, config, cwbhost)
     except KeyboardInterrupt:
-        print "KeyboardInterrupt"
+        print ("KeyboardInterrupt")
         return
     except:
-        print "EXCEPTION"
+        print ("EXCEPTION")
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
+            print (line)
         return
         
 
@@ -228,30 +234,32 @@ def Latency(cwbsncl, config, cwbhost):
     try:
         cmd = ['java', '-jar','%s/CWBQuery.jar' %config.get('cwb','CWBQUERYPATH'), '-re', cwbsncl, '-lat']
 
-        #print cmd
-        
         if cwbhost:
             cmd.append('-h')
             cmd.append(cwbhost)
-        
 
         if debug:
-            print cmd
+            print (cmd)
+
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         proc.wait()        
         queryjarlines =  proc.stdout.readlines()
+        queryjarlines = [line.decode() for line in queryjarlines]
+        
+        if "".join(queryjarlines).find("No route to host") != -1:
+            print ("Latency information unavailable from CWB host, %s \n" %cwbhost)
+            return
         
         for line in queryjarlines:
-            print line.strip('\n')
+            print (line.strip('\n'))
     except KeyboardInterrupt:
         raise        
     except:
-        print "Latency EXCEPTION"
+        print ("Latency EXCEPTION")
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print exc_type
-        print exc_value
-        print exc_traceback
-    
+        for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
+            print (line)
+
 
 
 def Gaps(cwbsncl, options, config):
@@ -262,25 +270,24 @@ def Gaps(cwbsncl, options, config):
     paststr = '"%s"' %time.strftime('%Y/%m/%d %H:%M:%S', past)
     cmd = ['java', '-jar','%s/CWBQuery.jar' %config.get('cwb','CWBQUERYPATH'), '-h', config.get('cwb','CWBIP'), '-p', config.get('cwb','CWBPORT'), '-s', cwbsncl, '-b', paststr,  '-d', '%s' %config.get('duration','GAPDURATION'), '-gaps']
     if debug:
-        print cmd
+        print (cmd)
 
     try:
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        #proc.wait()        
         nowstr = time.strftime('%Y/%m/%d %H:%M:%S',time.gmtime(now - float(config.get('duration','DURATION'))))
         queryjarlines =  proc.stdout.readlines()
+        
+        print ("\nChecking %s at %s UTC (gaps displayed are from the past hour)\n" %(options.sncl, nowstr))
+        for line in queryjarlines:
+            print (line.decode().strip('\n'))
+
     except KeyboardInterrupt:
-        raise
+        raise                
     except:
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print exc_type
-        print exc_value
-        print exc_traceback
-
-    print "\nChecking %s at %s UTC (gaps displayed are from the past hour)\n" %(options.sncl, nowstr)
-    for line in queryjarlines:
-        print line.strip('\n')
-
+        for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
+            print (line)
+        
 
 #utilities
 def BlankPad(code, length):
