@@ -3,7 +3,7 @@
 ##################################
 # Wrapper around CWBQuery.jar
 #
-# Author: Aparna Bhaskaran (aparnab@gps.caltech.edu)
+# Author: Aparna Bhaskaran
 ##################################
 
 from argparse import ArgumentParser
