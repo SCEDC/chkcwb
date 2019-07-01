@@ -27,10 +27,12 @@ Pre-requisites
 Installation 
 -------------
 
-chkcwb is deployed python's venv (virtualenv for Python 2.x). The steps to install are:
+chkcwb is deployed using python's venv (virtualenv for Python 2.x). The steps to install are:
 
-```git clone https://github.com/SCEDC/chkcwb.git. 
-cd chkcwb```
+```
+git clone https://github.com/SCEDC/chkcwb.git. 
+cd chkcwb
+```
 
 setup-chckwb.py creates a virtual environment named chkcwb-venv and installs dependencies within the virtual environment from requirements.txt. 
 Note : you will need to install virtualenv, if you are using python2
