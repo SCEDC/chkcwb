@@ -3,8 +3,6 @@ import sys
 import shutil
 import traceback
 
-#pythonversion = "python2.7"
-#pythonexe = "/opt/python27/bin/%s" %pythonversion
 virtualenvexe = "/bin/env virtualenv"
 venvpath = "chkcwb-venv"
 
@@ -12,9 +10,8 @@ if len(sys.argv) > 1:
     venvpath = os.path.join(sys.argv[1], venvpath)
 
 cmd = ""
-#print ("Found Python %s.%s.%s" %(sys.version_info[0], sys.version_info[1],sys.version_info[2]))
 if sys.version_info[0] == 3: #sys.version_info[0] is python major version
-#if pythonversion.find("python3") != -1:
+
     cmd = "python3 -m venv " 
 else:
     cmd = "%s " %virtualenvexe
