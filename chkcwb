@@ -1,15 +1,3 @@
-#!/bin/bash
+#!/bin/sh
 
-CWBQUERY_PATH=/folder/where/CWBQuery.jar/lives
-
-if [ ! -e ${HOME}/query.prop ]; then
-  cp -p $CWBQUERY_PATH/query.prop $HOME 
-else
-  diff -q ${HOME}/query.prop $CWBQUERY_PATH/query.prop 1>/dev/null 2>&1
-  if [ "$?" != 0 ]; then
-    cp -p $CWBQUERY_PATH/query.prop $HOME
-  fi
-fi
-
-
-/some/path/chkcwb.py "$@"
+./chkcwb.py "$@"
