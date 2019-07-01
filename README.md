@@ -24,10 +24,10 @@ Pre-requisites
 - cx_Oracle, if using AQMS database
 
 
-Installation 
--------------
+Installation (linux and mac)
+----------------------------
 
-chkcwb is deployed using python's venv (virtualenv for Python 2.x). The steps to install are:
+chkcwb is deployed using python's venv (virtualenv for Python 2.x). On linux and mac, the steps to install are:
 
 ```
 git clone https://github.com/SCEDC/chkcwb.git
