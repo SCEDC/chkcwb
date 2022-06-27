@@ -16,9 +16,9 @@ if sys.version_info[0] == 3: #sys.version_info[0] is python major version
 else:
     cmd = "%s " %virtualenvexe
 
-cmd += venvpath + " && . %s/bin/activate"
+cmd += venvpath + " && . %s/bin/activate" %venvpath
 if os.path.exists('requirements.txt'):
-    cmd += " &&  pip install -r requirements.txt" %venvpath
+    cmd += " &&  pip install -r requirements.txt" 
 print(cmd)
 
 try:
