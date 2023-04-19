@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ##################################
 # Wrapper around CWBQuery.jar
@@ -6,19 +6,16 @@
 # Author: Aparna Bhaskaran (aparnab@gps.caltech.edu)
 ##################################
 
-from __future__ import print_function
+
 from argparse import ArgumentParser
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import configparser
 import time
 import subprocess
 import re
 import sys
 import os
 import glob
-import cx_Oracle
+import psycopg2
 import traceback
 
 #debug
@@ -125,9 +122,10 @@ def Main():
     if sncl.find('*') > 0 or sncl.find('?') >  0 or sncl.find('_') > 0:
 
         if config.has_section('db'):
-            dbuser = config.get('db','USER')
-            dbpassword = config.get('db','PASSWORD')
-            dbname = config.get('db','NAME')
+            db_user = config.get('db','USER')
+            db_password = config.get('db','PASSWORD')
+            db_name = config.get('db','NAME')
+            db_host = config.get('db','HOST')
 
             if config.has_option('db','SQL'):
                 statement = config.get('db','SQL')
@@ -139,7 +137,7 @@ def Main():
                     if debug:
                         print (statement)
 
-                    conn = cx_Oracle.connect(dbuser, dbpassword, dbname)
+                    conn = psycopg2.connect(user=db_user, password=db_password, database=db_name, host=db_host)
                     cursor = conn.cursor()                
                     cursor.execute(statement)
                     resultSet = cursor.fetchall()
