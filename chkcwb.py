@@ -15,12 +15,8 @@ import re
 import sys
 import os
 import glob
-<<<<<<< HEAD
 #import psycopg2
 from sqlalchemy import create_engine, text
-=======
-import psycopg2
->>>>>>> c787003cfc9870c7ec283c17bb4075442f468ce9
 import traceback
 
 #debug
