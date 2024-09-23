@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ##################################
 # Wrapper around CWBQuery.jar
@@ -6,19 +6,21 @@
 # Author: Aparna Bhaskaran (aparnab@gps.caltech.edu)
 ##################################
 
-from __future__ import print_function
+
 from argparse import ArgumentParser
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import configparser
 import time
 import subprocess
 import re
 import sys
 import os
 import glob
-import cx_Oracle
+<<<<<<< HEAD
+#import psycopg2
+from sqlalchemy import create_engine, text
+=======
+import psycopg2
+>>>>>>> c787003cfc9870c7ec283c17bb4075442f468ce9
 import traceback
 
 #debug
@@ -128,6 +130,8 @@ def Main():
             dbuser = config.get('db','USER')
             dbpassword = config.get('db','PASSWORD')
             dbname = config.get('db','NAME')
+            dbhost = config.get('db','HOST')
+            dbport = config.get('db','PORT')
 
             if config.has_option('db','SQL'):
                 statement = config.get('db','SQL')
@@ -138,13 +142,10 @@ def Main():
                         statement += "order by 1,2"
                     if debug:
                         print (statement)
-
-                    conn = cx_Oracle.connect(dbuser, dbpassword, dbname)
-                    cursor = conn.cursor()                
-                    cursor.execute(statement)
-                    resultSet = cursor.fetchall()
-                    cursor.close()
-                    conn.close()
+                    
+                    engine = create_engine(f"postgresql+psycopg2://{dbuser}:{dbpassword}@{dbhost}:{dbport}/{dbname}")
+                    with engine.connect() as conn:                    
+                        resultSet = conn.execute(text(statement))                    
                     stationsfromregex = [BlankPad("{0}{1}".format(result[0],result[1]),7) for result in resultSet]
                 
         
