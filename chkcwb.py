@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ##################################
 # Wrapper around CWBQuery.jar
@@ -6,20 +6,21 @@
 # Author: Aparna Bhaskaran (aparnab@gps.caltech.edu)
 ##################################
 
-from __future__ import print_function
+
 from argparse import ArgumentParser
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import configparser
 import time
 import subprocess
 import re
 import sys
 import os
 import glob
+<<<<<<< HEAD
 #import psycopg2
 from sqlalchemy import create_engine, text
+=======
+import psycopg2
+>>>>>>> c787003cfc9870c7ec283c17bb4075442f468ce9
 import traceback
 
 #debug
